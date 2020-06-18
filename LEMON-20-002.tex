@@ -606,13 +606,16 @@ For slimness equal to 0.4, for example, iDBSCAN has 92\% of background rejection
 %For each algorithm, the energy spectrum  of the total light for the clusters reconstructed within the detector sensitive area were studied. Figure \ref{fig_CosFe} shows the resulting distributions using the NNC algorithm at left and DBSCAN at right.
 
 
-The detector energy resolution was estimated by a fit to the clusters energy distributions accounting for natural radioactivity and the $^{55}$Fe events. The former was modeled by an exponential function and the latter by a Polya function \cite{bib:rolandiblum}, expressed by Eq.~\ref{fun:polya} where $b$ is a free parameter and $k=1/b-1$. The distribution has $\overline{n}$ as expected value, while the variance is governed by $\overline{n}$ and the $b$ parameter, as follows: $\sigma^2=\overline{n}(1+b\overline{n})$. The total likelihood is given by the sum of the two functions.
+The detector energy resolution was estimated by a fit to the clusters energy distributions accounting for natural radioactivity and the $^{55}$Fe events. The former was modeled by an exponential function and the latter by a Polya function \cite{bib:rolandiblum}:
 
 \begin{equation}
    P(n)=\frac{1}{b\overline{n}}\frac{1}{k!}\left(\frac{n}{b\overline{n}}\right)^k \cdot e^{-n/b\overline{n}}
    %A\frac{\Gamma(r+k)}{k!\Gamma(r)} p^k (1-p)^r e^{(-x/\lambda)} 
 \label{fun:polya}
 \end{equation}
+where $b$ is a free parameter and $k=1/b-1$. The distribution has $\overline{n}$ as expected value, while the variance is governed by $\overline{n}$ and the $b$ parameter, as follows: $\sigma^2=\overline{n}(1+b\overline{n})$. The total likelihood is given by the sum of the two functions.
+
+
 
 Figure~\ref{fig_CosFe} shows the fit results for NCC (left) and iDBSCAN (right) clusters without applying any selection on the slimness parameter.
 Based on the computed values, energy resolution were measured to be (18.1 $\pm$ 3.9)\% and (12.2 $\pm$ 1.8)\% for NNC and iDBSCAN respectively, and the energy conversion factor approximately 515 ADC units per keV for both.
