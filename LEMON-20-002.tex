@@ -11,8 +11,8 @@
 \usepackage{amsmath}
 \newcommand{\unit}[1]{\ensuremath{\textrm{\,#1}}\xspace}
 
-\usepackage{lineno}
-\linenumbers
+%\usepackage{lineno}
+%\linenumbers
 
 
 
@@ -76,12 +76,8 @@
 Time Projection Chambers (TPCs) working in combination with Gas Electron Multipliers (GEMs) produce a very  sensitive detector capable of observing low energy events. This is achieved by capturing photons generated during the GEM electron multiplication process by means of a high-resolution camera.
 The CYGNO experiment has recently developed a TPC Triple GEM detector coupled to a low noise and high spatial resolution CMOS sensor.
 For the image analysis, an algorithm based on an adapted version of the well-known DBSCAN was implemented, called iDBSCAN.
-%Recently it has become the official clustering algorithm of the Experiment replacing a widely used algorithm known as Nearest Neighbor Clustering (NNC).
-In this paper a description of the iDBSCAN algorithm is given, including test and validation of its parameters, and a comparison with a widely used algorithm known as Nearest Neighbor Clustering (NNC).
-%\textcolor{purple}{I'd drop next sentence in the abstract}
-%Three sets of data were used: one using a $^{55}$Fe radiation source, another exposing the detector to natural radioactivity only and another with the detector turned off to acquire electronic noise alone.
+In this paper a description of the iDBSCAN algorithm is given, including test and validation of its parameters, and a comparison with DBSCAN itself and a widely used algorithm known as Nearest Neighbor Clustering (NNC).
 The results show that the adapted version of DBSCAN is capable of providing full signal detection efficiency and very good energy resolution while improving the detector background rejection.
-%and its energy resolution.
 }
 
 %\keywords{Only keywords from JINST's keywords list please}
@@ -116,7 +112,7 @@ This modified version of DBSCAN, called intensity-based DBSCAN or simply iDBSCAN
 %The resulting algorithm 
 has shown to be able to improve detector performance when compared to the previously used algorithm based on the Nearest Neighbor Clustering (NNC) technique \cite{bib:fe55}.
 %In this work, a full description of the clustering algorithm applied to the CYGNO prototype known as LEMON is given as well as the procedure for selecting the values of its parameters.
-This paper proposes a comparative study on the impact of NNC and iDBSCAN on two crucial detector's parameters, background rejection and energy resolution, measured in the energy range of a few keV.
+This paper proposes a study on the impact of iDBSCAN when compared to NNC and DBSCAN on two crucial detector's parameters, background rejection and energy resolution, measured in the energy range of a few keV.
 For such, low energy particles (5.9 keV photons) produced by a $^{55}$Fe radioactive source, background from natural radioactivity and data with electronics noise only were employed. 
 
 %This document will be organized as follows: section \ref{sec:expSetup} will present the experimental setup; section \ref{sec:daq} will describe the usual CYGNO's data analysis procedure, giving a main focus on the description of iDBSCAN and validation of its in-use parameters; and section \ref{sec:algoComp} will be used to compare the iDBSCAN algorithm to the NNC one by assessing their impact on the detector's performance. Finally, section \ref{sec:conclusion} will offer the work's final conclusions.
@@ -139,12 +135,12 @@ For such, low energy particles (5.9 keV photons) produced by a $^{55}$Fe radioac
 \label{sec:expSetup}
 
 
-\subsection{LEMON detector}
+\subsection{LEMOn detector}
 
-LEMOn (Large Elliptical MOdule) is the most recent CYGNO experiment's prototype. Its core consists of a 7 liter active drift volume surrounded by an elliptical field cage ($\rm 20 \times 20 \times 24~cm^3$) and a $\rm 20 \times 24~cm^2$ Triple GEM structure whose produced photons are readout by an Orca Flash 4 CMOS-based camera~\cite{ORCAcamera} placed at a distance of $\rm 52.5~cm$ (i.e. 21 Focal Length, FL). 
+LEMOn (Large Elliptical MOdule)~\cite{bib:ieee17} is the most recent CYGNO experiment's prototype. Its core consists of a 7 liter active drift volume surrounded by an elliptical field cage ($\rm 20 \times 20 \times 24~cm^3$) and a $\rm 20 \times 24~cm^2$ Triple GEM structure whose produced photons are readout by an Orca Flash 4 CMOS-based camera~\cite{ORCAcamera} placed at a distance of $\rm 52.5~cm$ (i.e. 21 Focal Length, FL). 
 %\textcolor{purple}{I'd drop next sentence, referee can ask about trigger settings and performance}
 %Additionally, for triggering purposes, a Photo-Multiplier Tube (PMT) was installed on the opposite side of the Triple GEM, as shown in the Figure~\ref{fig_lemon_1}. 
-More details are given in Ref. \cite{bib:fe55, bib:eps, bib:ieee17}.
+More details are given in Ref. \cite{bib:fe55, bib:eps}.
 The drift chamber was filled with a $\rm He/CF_4$ gas mixture in the proportion of $60/40$
 %\textcolor{purple}{I'd drop next sentence}
 %A cover shield, formed of lead (Pb), was placed surrounding the sensitive volume of the detector (part A in Figure~\ref{fig_lemon_1}), in order to shield it from soft cosmic rays and external natural radioactivity background.
@@ -191,7 +187,7 @@ The typical operating conditions of the detector, as used in this work, are: $E_
 Data were acquired using auto-trigger mode. For the proposed study presented in this document, three different acquisition datasets were used, as listed below:
 
 \begin{itemize}
-    \item Electronic noise (EN) dataset: produced by lowering down $V\rm _{GEM}$ to a value where the multiplication process is forbidden (6478 images recorded);
+    \item Electronic noise (EN) dataset: produced by lowering down $V\rm _{GEM}$ to 260 V, a value where the multiplication process is forbidden (6478 images recorded);
     \item Natural radioactivity (NRAD) dataset (composed of cosmic rays and environmental radioactivity): produced by exposing the camera lens and turning on the detector power supplies and raising $V\rm _{GEM}$ to the nominal value of 460 V to allow charge multiplication and secondary light emission during this process (864 images recorded);
     \item Electron Recoils (ER) dataset: the same as the previous item but placing a $^{55}$Fe source near to the detector drift volume (864 images recorded).
     %\item $^{55}$Fe$_{70/30}$ dataset: the same as the previous item but using the $He/CF_4$ -  $70/30$ gas mixture (1000 images recorded).
@@ -246,11 +242,11 @@ In this work, the signals of interest are those generated by the 5.9 keV photons
 
 \subsection{Data structure}
 
-The acquisition system provides images with $2048 \times 2048$ pixels captured by the Orca Flash 4 CMOS sensor. The photo sensor has an sensitive area of 13312 $\mu m^2$ and each pixel has a size of $6.5 \mu m \times 6.5 \mu m$.
+The acquisition system provides images with 2048 $\times$ 2048 pixels captured by the Orca Flash 4 V3 CMOS sensor. The photo sensor has a sensitive area of 13312 $\times$ 13312 $\mu$m$^2$ and each pixel has a size of 6.5 $\mu$m $\times$ 6.5 $\mu$m.
 %The camera is equipped with a Schneider lens (D) 325 mm focal length, 0.95 aperture (D).
-The camera's exposure time was set to 40 ms and it covers an area of $26 \times 26$ cm$^2$ in relation to the plane of the last layer of the GEM detector. Each pixel provides a response, here called intensity, proportional to the number of collected photons \cite{bib:nim_orange1} added to a baseline, also known as pedestal, which can be defined as the intensity value corresponding to zero photons. Specifically, the pedestal average value of the sensor is about 99 counts, however it can vary from pixel to pixel.
+The camera's exposure time was set to 40 ms and it covers an area of 26 $\times$ 26 cm$^2$ in relation to the plane of the last layer of the GEM detector. Each pixel provides a response, here called intensity, proportional to the number of collected photons \cite{bib:nim_orange1} added to a baseline, also known as pedestal, which can be defined as the intensity value corresponding to zero photons. Specifically, the pedestal average value of the sensor is about 99 counts, however it can vary from pixel to pixel.
 Additionally, the noise level is another important parameter that can vary from pixel to pixel.
-Those effects can be seen in Fig. \ref{fig:sensor_noise} which shows the mean and standard deviation distributions of the noise as computed for each pixel, produced with the EN dataset.
+Those effects can be seen in Fig. \ref{fig:sensor_noise}, which shows the mean and standard deviation distributions of the noise as computed for each pixel, produced with the EN dataset.
 To account for such variations, both the pixel baseline ($\mu_i$) and its average noise ($\sigma_i$), calculated as the standard deviation of the pedestal distribution,  are estimated for every single pixel $i$ before running the event reconstruction procedure.
 
 
@@ -275,7 +271,7 @@ The current CYGNO's event-reconstruction algorithm is represented in the flowcha
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.7\textwidth]{fluxgram_algorithm.PNG}
+\includegraphics[width=0.9\textwidth]{fluxgram_algorithm.PNG}
 \caption{Flowchart of the CYGNO's event-reconstruction algorithm.}
 \label{fig_algo}
 \end{figure}
@@ -288,26 +284,21 @@ The current CYGNO's event-reconstruction algorithm is represented in the flowcha
 
     \item Lower and upper thresholds are applied to $I_i$.
     While the upper limit is set to $100$ counts, the lower limit is set to 1.3 times $\sigma_i$.
-    The upper limit allows to remove pixels with a too large intensity, very likely not due to ionization in gas, while the lower limit was optimized and set to be just above noise level to ensure a good detection efficiency, but not too low in order not to overload the event-reconstruction algorithm with pixels dominated by noise. Pixels outside those limits have their intensities reset to zero.
+    The upper limit allows to remove pixels with a too large intensity, produced mainly due to leakage currents that go into sensor wells - also known as hot-pixels, while the lower limit was optimized and set to be just above noise level to ensure a good detection efficiency, but not too low in order not to overload the event-reconstruction algorithm with pixels dominated by noise. Pixels outside those limits have their intensities reset to zero.
     
     
-    \item Images are then rescaled to $512 \times 512$ pixels, for CPU reasons, so that each $4 \times 4$ matrix, called macro-pixel, is assigned an intensity value corresponding to the average of the intensities $I_i$ of the 16 pixels occupying the same area of the sensor. %over the $2048 \times 2048$ image.
+    \item Images are then rescaled to 512 $\times$ 512 pixels, for CPU reasons, so that each $4 \times 4$ matrix, called macro-pixel, is assigned an intensity value corresponding to the average of the intensities $I_i$ of the 16 pixels occupying the same area of the sensor. %over the $2048 \times 2048$ image.
     %this process is done by get the mean value of 16 pixels (4x4) on the full resolution image to represent them on the rescaled image.
     
     \item The rescaled image goes then through a filtering stage based on a $4 \times 4$ median filter that replaces a given macro-pixel intensity by the median of all macro-pixels in its neighborhood $w$, $g(x,y)$, as given by Equation \ref{eq10} \cite{filterStudy}, where $f(x,y)$ is the intensity of the macro-pixel $(x,y)$.
-    
-     \begin{equation}
+        \begin{equation}
              g(x,y) = median\{f(x,y), (x,y) \in w\}
              \label{eq10}
          \end{equation}
         
-    Such filter is widely used in many applications due to its effective noise suppression capability and high computational efficiency~\cite{Dong_2007}.
+    Such filter is widely used in many applications due to its effective noise suppression capability and high computational efficiency~\cite{gonzalez2002digital}.
     Tests performed on the EN dataset (see section \ref{sec:acrRuns}) showed that this filter is able to reduce the number of noise pixels sent to the clustering algorithm by a factor of 3.07 $\pm$ 0.02.
-    
-    
-        
-        
-  
+ 
     
     \item Finally, the coordinates (X, Y) and respective intensities (Z) of the pixels with non-zero $I_i$ values are sent to the clustering algorithm whose output is used to extract clusters' features such as integrated light, length and width, computed over the full-resolution image. Those features are then used to select events of interest. 
 \end{enumerate}
@@ -356,6 +347,8 @@ In this work three features, extracted from the clusters, are used:
 
 
 As mentioned before, prior to iDBSCAN, the CYGNO clustering algorithm was based on the widely employed NNC method. Basically it groups neighboring pixels that went through a selection similar to the one in step 3. A detector performance study using such method was presented in \cite{bib:fe55}.
+To understand the advantages of using iDBSCAN, in addition to the comparison with NNC, the performance achieved with the DBSCAN algorithm will also be presented.
+%In addition, to understand the advantages of using iDBSCAN, the performance achieved with the DBSCAN algorithm will also be presented.
 %Recently, a new clustering procedure called intensity-based DBSCAN (iDBSCAN) was implemented and included as part of the Experiment's official event-reconstruction algorithm.
 %Since then, a new clustering procedure has been implemented, named intensity-based DBSCAN (iDBSCAN), and is currently in use by the Experiment.
 %This section will be used to describe iDBSCAN and to validate its parameters values. As will be shown in section \ref{sec:algoComp}, iDBSCAN was able to produce an improvement of the CYGNO's clustering stage, regarding the low-energy region of the
@@ -377,6 +370,8 @@ Then, the same process happens to all the neighboring elements in order to expan
 To be applied to CYGNO, instead of using the number of elements as a parameter to decide if the elements inside a hyper-sphere make part of a cluster, the sum of their intensity values is used. Consequently, the $N_{min}$ become a parameter related to the total intensity within a hyper-sphere instead of to the number of elements.
 Therefore, rather than having each pixel counted as a unit when computing the number of pixels inside a given hyper-sphere, each pixel counts $I_i$ times.
 If the total intensity is equal or greater than a certain value ($N_{min}$), they are considered as making part of a cluster.
+During the development of the iDBSCAN algorithm, many $\epsilon$ and $N_{min}$ values have been tested, leading us to converge to values around 5.8 and 30, respectively, which will be validated in section~\ref{idbscan_vali}.
+Additionally, to make iDBSCAN more robust against electronic noise and intensity spikes, a cluster is required to have more than two macro-pixels, otherwise it is discarded. This same operation is also applied to NNC and DBSCAN.
 
 
 %This new method works by performing iterations of the naive algorithm; in other words, the parameters are configured to look for a particular type of signal in each iteration and simulating the $3^{rd}$ dimension (the intensity); which means to use the coordinate of the pixel (x,y) that passed through the threshold and replicate its coordinate by intensity (z). In this way, it is possible to emulate the third dimension (photons) without have to lead with the curse of dimensionality~\cite{porter2013statistical}.
@@ -384,23 +379,25 @@ If the total intensity is equal or greater than a certain value ($N_{min}$), the
 
 %\subsection{Validation of the clustering parameters}
 
-\subsubsection{Validation of the iDBSCAN parameters}
+\subsubsection{Validation of the iDBSCAN parameters}\label{idbscan_vali}
 
-The CYGNO Collaboration is currently using iDBSCAN for the clustering method in its event-reconstruction. The iDBSCAN performance for signals produced by the interactions of photons from $^{55}$Fe has been studied as a function of different values of the its parameters: $\epsilon$ and $N_{min}$.
+The CYGNO Collaboration is currently using iDBSCAN for the clustering method in its event-reconstruction.
+The iDBSCAN performance for signals produced by the interactions of photons from $^{55}$Fe has been studied as a function of different values of its parameters: $\epsilon$ and $N_{min}$.
 %For studies related to the low energy region, as for the $^{55}$Fe photons, CYGNO has been using iDBSCAN configured with the following parameters values: 5.8 for \textit{eps} and 30 for \textit{minpoints}.
+%During its development, many $\epsilon$ and $N_{min}$ values have been tested, leading to values around 5.8 and 30, respectively. 
 In order to evaluate those values, a test on the detector efficiency and background rejection was carried out: a scan over the two iDBSCAN parameters has been performed.
 %In order to test the efficiency of CYGNO's DBSCAN in finding $^{55}$Fe spots, a scan over its two parameters has been performed.
 While the $\epsilon$ ($N_{min}$) parameter will be fixed to a value of 5.8 (30), the other parameter's value will be swept from 5 to 50 (4 to 10). 
 Figure \ref{fig:epsscan} (left) shows the total number of clusters found as a function of $\epsilon$ for two distinct datasets: ER and NRAD.
 %The former contains low energy electrons recoils and natural radioactive events and the latter only natural radioactive events.
 For low $\epsilon$ values the number of NRAD clusters tends to increase, indicating an increase of background contamination. However, for $\epsilon$ values between 5 and 7, this contamination rate stabilizes around a minimum value.
-Figure~\ref{fig:epsscan} (right) shows the same trend, while counting only clusters with an integral in the range 2000–4000 photons, characteristic of $^{55}$Fe deposits. This region refers to the energy region of the $^{55}$Fe produced electron recoils (see Fig.~\ref{fig_compfe}).
+Figure~\ref{fig:epsscan} (right) shows the same trend, while counting only clusters with an integral in the range 2000–4000 photons, characteristic of $^{55}$Fe deposits. This region refers to the energy region of the $^{55}$Fe produced electron recoils (see later Fig.~\ref{fig_compfe}).
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.45\textwidth]{TotalEpsScan.pdf}
 \includegraphics[width=0.45\textwidth]{SpotEpsScan.pdf}
-\caption{Total number of reconstructed clusters (left) and Spot number (right) as a function of $\epsilon$ for runs with NRAD events only and with $^{55}$Fe + NRAD events.}
+\caption{Total number of reconstructed clusters (left) and Number of clusters in the $^{55}$Fe peak region (right) as a function of $\epsilon$ for ER and NRAD runs and also a line for the $^{55}$Fe, which means ER-NRAD.}
 \label{fig:epsscan}
 \end{figure}
 
@@ -412,16 +409,24 @@ Similarly, a scan over the $N_{min}$ parameter has been performed as shown in Fi
 \centering
 \includegraphics[width=0.45\textwidth]{TotalMinScan.pdf}
 \includegraphics[width=0.45\textwidth]{SpotMinScan.pdf}
-\caption{Total number of reconstructed clusters (left) and Spot number (right) as a function of $N_{min}$ for runs with NRAD events only and with $^{55}$Fe + NRAD events.}
+\caption{Total number of reconstructed clusters (left) and Number of clusters in the $^{55}$Fe peak region (right) as a function of $N_{min}$ for ER and NRAD runs and also a line for the $^{55}$Fe, which means ER-NRAD.}
 \label{fig:minscan}
 \end{figure}
 
-Finally, energy resolution has also been measured in function of the iDBSCAN parameters.
+Finally, energy resolution has also been measured as function of the iDBSCAN parameters.
 Values around 12.2\% have been measured for all the $\epsilon$ and $N_{min}$ considered values, with negligible variation. Section \ref{subsec:detres} provides details about the energy resolution measurement. 
+
+\hspace{0pt}
+
+The same procedure performed to choose iDBSCAN parameters was also applied to DBSCAN. The resulting values for the DBSCAN parameters were 6 for $\epsilon$ and 20 for $N_{min}$. It is noteworthy that the value of eps for DBSCAN is very close to the 5.8 found by iDBSCAN, which shows a coherence since the two-dimensional space is the same for both algorithms. The DBSCAN graphs are not shown here as it adds little information to the work considering that they have characteristics similar to those presented in Figs. \ref{fig:epsscan} and \ref{fig:minscan}.
+
+%\textcolor{red}{The same procedure performed to choose the iDBSCAN parameters has also been applied to DBSCAN.
+%The DBSCAN graphs are not shown here as it adds little information to the work considering that they have characteristics similar to those presented in Figs. \ref{fig:epsscan} and \ref{fig:minscan}.
+%The resulting values for the DBSCAN parameters were 6 for $\epsilon$ and 20 for $N_{min}$.}
 
 %\section{CYGNO's density-based clustering compared to the previous algorithm}
 %\section{CYGNO's DBSCAN compared to the previous algorithm}
-\section{iDBSCAN and NNC comparison}
+\section{iDBSCAN compared to DBSCAN and NNC}
 \label{sec:algoComp}
 
 
@@ -435,44 +440,43 @@ The EN acquired data produces low energy clusters with a distribution squeezed i
 In this last case, the energy spectrum is composed of background and $^{55}$Fe induced deposits and, therefore, to reconstruct the $^{55}$Fe energy distribution, the background distribution should be subtracted. All the distributions were generated with the same amount of images, 864 of them, except for the iDBSCAN distributions of Fig. \ref{fig_compnoise} which used 6478 images, in order to collect enough EN-clusters, which occur at a low rate.  
 Additionally, the signal purity is enhanced accounting for the cluster aspect ratio, called slimness, defined as the ratio between the minor axis (width) and major axis (length) of each cluster.
 
-Figure \ref{fig_compnoise} compares the energy spectrum of clusters generated by NNC with those generated by iDBSCAN for EN events without and with a selection based on the slimness parameter, considering only clusters with slimness greater than 0.4 for the later case. The computed numbers of EN-clusters per image for NNC and iDBSCAN were 4.61 $\pm$ 0.07 and $(9 \pm 4)\times 10^{-4}$, respectively.
-Regarding NNC, EN-clusters dominate the background rate for energies below 500 photons which can be noticed by comparing the EN energy distribution of Fig. \ref{fig_compnoise} with that of the NRAD shown in Fig. \ref{fig_compcosmic}. Selection on slimness variable decreases the number of clusters per image to 3.80 $\pm$ 0.07 and $(5 \pm 3)\times 10^{-4}$ for NNC and iDBSCAN, respectively. Therefore, when compared to NNC, iDBSCAN is able to reduce the number of EN-clusters per image by a  
-%\textcolor{purple}{a factor $(5\div7)\times 10^3$}
-factor of $(5\div7)\times 10^3$.
+Figure \ref{fig_compnoise} compares the energy spectrum of clusters generated by NNC and DBSCAN with those generated by iDBSCAN for EN events without and with a selection based on the slimness parameter, considering only clusters with slimness greater than 0.4 for the later case. The computed numbers of EN-clusters per image for NNC, DBSCAN and iDBSCAN were $4.61 \pm 0.17$, $3.17 \pm 0.12$ and $(9 \pm 4)\times10^{-4}$, respectively.
+Regarding NNC and DBSCAN, EN-clusters dominate the background rate for energies below 500 photons which can be noticed by comparing the EN energy distribution of Fig. \ref{fig_compnoise} with that of the NRAD shown in Fig. \ref{fig_compcosmic}. Selection on slimness variable decreases the number of clusters per image to $3.80 \pm 0.14$, $2.17 \pm 0.09$ and $(5 \pm 3)\times 10^{-4}$ for NNC, DBSCAN and iDBSCAN, respectively. Therefore, when compared to NNC and DBSCAN, iDBSCAN is able to reduce the number of EN-clusters per image by a factor of $(3\div7)\times 10^3$.
 %$(5.1\pm2.3)\times 10^3$ and $(7.6\pm4.6)\times 10^3$ for the cases without and with slimness cut, respectively.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.45\textwidth]{LigthYield_No_wo.pdf}
 \includegraphics[width=0.45\textwidth]{LigthYield_No_Slim.pdf}
-\caption{Clusters energy distribution for NNC and iDSBSCAN applied to the EN dataset, without (left) and with (right) a selection on the slimness.}
+\caption{Clusters energy distribution for NNC, DBSCAN and iDSBSCAN applied to the EN dataset, without (left) and with (right) a selection on the slimness.}
 \label{fig_compnoise}
 \end{figure}
 
 
-Figure~\ref{fig_compcosmic} presents the energy distributions for the NNC and iDBSCAN clusters using the NRAD dataset without (left) and with (right) a selection on slimness.
-iDBSCAN presents a clear peak evolution around 300 photons while NNC accumulates clusters with lower energies. As mentioned before, for NNC this region is highly populated by EN-clusters.
-iDBSCAN reduces the number of background events in the region between 2000 and 4000 photons, which is the region where the $\rm ^{55}Fe$ events are expected to be, as mentioned before, providing better background rejection for low energy events as for the 5.9 keV photons.
-On the right of Fig.~\ref{fig_compcosmic}, the distribution of light, only considering clusters with slimness greater than 0.4 is shown. This selection reduces even more the number of background events in the $\rm ^{55}Fe$ region. 
-However, for the lower energy region, the number of fake clusters is only slightly reduced, causing iDBSCAN to maintain a better background rejection efficiency when compared to NNC.
+Figure~\ref{fig_compcosmic} presents the energy distributions for the NNC, DBSCAN and iDBSCAN clusters using the NRAD dataset without (left) and with (right) a selection on slimness.
+iDBSCAN presents a clear peak evolution around 300 photons while NNC and DBSCAN accumulate clusters with lower energies due to EN-clusters.
+iDBSCAN and DBSCAN reduce the number of background events in the region between 2000 and 4000 photons when compared to NNC, which is the region where the $\rm ^{55}Fe$ events are expected to be, as mentioned before, providing better background rejection for low energy events as for the 5.9 keV photons.
+On the right of Fig.~\ref{fig_compcosmic}, the distribution of light, only considering clusters with slimness greater than 0.4 is shown. This selection reduces even more the number of background events in the $\rm ^{55}Fe$ region, bringing NNC closer to the other methods. 
+However, for the lower energy region, the number of fake clusters is only slightly reduced, causing iDBSCAN to maintain a better background rejection efficiency when compared to NNC and DBSCAN.
 
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.45\textwidth]{LigthYield_Cos_wo.pdf}
 \includegraphics[width=0.45\textwidth]{LigthYield_Cos_Slim.pdf}
-\caption{Clusters energy distribution for NNC and iDSBSCAN applied to the NRAD dataset, without (left) and with (right) a selection based on the slimness.}
+\caption{Clusters energy distribution for NNC, DBSCAN and iDSBSCAN applied to the NRAD dataset, without (left) and with (right) a selection based on the slimness.}
 \label{fig_compcosmic}
 \end{figure}
 
-Figure~\ref{fig_compfe} shows the results of the same analysis performed on the ER dataset. In this case, the  sum of the distribution obtained in the NRAD sample and the one from $^{55}$Fe interactions is expected. As shown, both clustering algorithms are sensitive to the 5.9 keV photon events. However, as commented previously, a higher purity level is achieved using iDBSCAN.
-After applying the slimness threshold, as shown in the right plot of Fig.~\ref{fig_compfe}, the NNC and iDBSCAN  $^{55}$Fe peaks get closer indicating that both methods have similar detection efficiency considering that the number of $^{55}$Fe spots found by each method is practically the same.  
+Figure~\ref{fig_compfe} shows the results of the same analysis performed on the ER dataset. In this case, the  sum of the distribution obtained in the NRAD sample and the one from $^{55}$Fe interactions is expected.
+As shown, all three clustering algorithms are sensitive to the 5.9 keV photon events. However, as commented previously, a higher purity level is achieved using iDBSCAN.
+After applying the slimness threshold, as shown in the right plot of Fig.~\ref{fig_compfe}, the distributions around the $^{55}$Fe peak of NNC, DBSCAN and iDBSCAN get closer indicating that the three methods have similar detection efficiency considering that the number of $^{55}$Fe spots found by each method is practically the same.  
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.45\textwidth]{LigthYield_Fe_wo.pdf}
 \includegraphics[width=0.45\textwidth]{LigthYield_Fe_Slim.pdf}
-\caption{Clusters energy distribution for NNC and iDSBSCAN applied to the ER dataset, without (left) and with (right) a selection based on the slimness.}
+\caption{Clusters energy distribution for NNC, DBSCAN and iDSBSCAN applied to the ER dataset, without (left) and with (right) a selection based on the slimness.}
 \label{fig_compfe}
 \end{figure}
 
@@ -480,9 +484,8 @@ After applying the slimness threshold, as shown in the right plot of Fig.~\ref{f
 
 
 \subsection{Slimness selection optimization}
-Figure \ref{fig_cdf_slim} shows the slimness cumulative distribution of clusters for an interval between zero and one applied to the NRAD and ER datasets.
-NNC and iDBSCAN cases are shown on the left and right plots, respectively.
-As it is possible to see, in both cases, $^{55}$Fe spots tend to have slimness higher than about 0.4.
+Figure \ref{fig_cdf_slim} shows the slimness cumulative distribution of clusters for an interval between zero and one applied to the NRAD and ER datasets for NNC, DBSCAN and iDBSCAN.
+As it is possible to see, in all cases, $^{55}$Fe spots tend to have slimness higher than about 0.4.
 This variable can be used in conjunction with energy measurement to discriminate $^{55}$Fe spots from background clusters.
 In this section the value of slimness will be swept so that it is possible to choose the most suitable value for its use as an event selection parameter as well as to evaluate its impact when applied together with the energy measurement.
 %In this section, the slimness value will be swept the impact of applying different values of slimness for selecting $^{55}$Fe spots is evaluated. 
@@ -490,9 +493,10 @@ In this section the value of slimness will be swept so that it is possible to ch
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.45\textwidth]{CDF_Slimness_2D.pdf}
-\includegraphics[width=0.45\textwidth]{CDF_Slimness_3D.pdf}
-\caption{Cumulative distribution of the slimness for NRAD and $\rm ^{55}Fe$+NRAD data, for NNC (left) and iDSBSCAN (right).} 
+\includegraphics[width=0.32\textwidth]{CDF_Slimness_2D.pdf}
+\includegraphics[width=0.32\textwidth]{CDF_Slimness_1D.pdf}
+\includegraphics[width=0.32\textwidth]{CDF_Slimness_3D.pdf}
+\caption{Cumulative distribution of the slimness for NRAD and ER data, for NNC, DBSCAN and iDSBSCAN.} 
 \label{fig_cdf_slim}
 \end{figure}
 
@@ -500,25 +504,28 @@ In this section the value of slimness will be swept so that it is possible to ch
 In order to evaluate the signal efficiency and purity as a function of the slimness selection for the two algorithms
 %algorithms behavior as a function of slimness,
 %,which should return a purer cluster sample given the differences between the $^{55}$Fe and natural radioactive tracks topologies, 
-the number of clusters within the selected $^{55}$Fe energy region (from 1500 to 4500 photons) was measured for various slimness threshold values (X $\geqslant$ x) as shown in Fig.~\ref{fig_slim_scan} for the NNC (left) and iDBSCAN (right) algorithms.
-This figure shows that iDBSCAN finds a similar number of clusters in the $^{55}$Fe region when compared to NNC for slimness below 0.4, given by the difference between the black and gray curves, but with lesser contamination (gray curve).
+the number of clusters within the selected $^{55}$Fe energy region (from 1500 to 4500 photons) was measured for various slimness threshold values (X $\geqslant$ x) as shown in Fig.~\ref{fig_slim_scan} for the NNC, DBSCAN and iDBSCAN algorithms.
+This figure shows that DBSCAN and iDBSCAN find a similar number of clusters in the $^{55}$Fe region when compared to NNC for slimness below 0.4, given by the difference between the black and gray curves, but with lesser contamination (gray curve).
 
-Considering that the $^{55}$Fe clusters produce an intensity that follows a Gaussian distribution with an average value of about 3000 photons and standard deviations of 550 and 371, for NNC and iDBSCAN respectively (see Fig. \ref{fig_CosFe}), then more than 99\% of the $^{55}$Fe clusters are selected between 1500 and 4500 photons.
+Considering that the $^{55}$Fe clusters produce an intensity that follows a Gaussian distribution with an average value of about 3000 photons and standard deviations of 550, 385 and 371, for NNC, DBSCAN and iDBSCAN respectively (see Fig. \ref{fig_CosFe}), then more than 99\% of the $^{55}$Fe clusters are selected between 1500 and 4500 photons.
 %, which are equivalent to about 2.7 standard deviations for NNC and 4.0 for iDBSCAN.
-On the other hand, for the same region, the subtraction of the natural radioactivity events between the $^{55}$Fe and NRAD acquisition runs has a mean value equal to zero but a fluctuation of about 23 (14) and 11 (7) clusters for slimness equal to 0.0 (0.4), for NNC and iDBSCAN respectively. Therefore, the dashed line of Fig. \ref{fig_slim_scan} is composed mainly of $^{55}$Fe events plus few background events produced by the statistical fluctuation that occurs in the process of subtracting natural radioactivity.
-As can be noticed by observing Fig. \ref{fig_compcosmic}, iDBSCAN tends to have less background contamination than NNC, reducing the statistical uncertainty related to the background subtraction. This effect is also shown by the shaded band drawn around the dashed lines of Fig. \ref{fig_slim_scan}.
+On the other hand, for the same region, the subtraction of the natural radioactivity events between the ER and NRAD acquisition runs has a mean value equal to zero but a fluctuation of about 23 (14), 10 (7) and 11 (7) clusters for slimness equal to 0.0 (0.4), for NNC, DBSCAN and iDBSCAN respectively. Therefore, the dashed line of Fig. \ref{fig_slim_scan} is composed mainly of $^{55}$Fe events plus few background events produced by the statistical fluctuation that occurs in the process of subtracting natural radioactivity.
+As can be noticed by observing Fig.~\ref{fig_compcosmic}, DBSCAN and iDBSCAN tend to have less background contamination than NNC, reducing the statistical uncertainty related to the background subtraction. This effect is also shown by the shaded band drawn around the dashed lines of Fig. \ref{fig_slim_scan}.
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.45\textwidth]{NNC_ScanSlim.pdf}
-\includegraphics[width=0.45\textwidth]{I2DBSCAN_Scanslim.pdf}
-\caption{Scan in the number of clusters on the $\rm ^{55}Fe$ peak region (between 1500 and 4500 photons) when changing the threshold on the slimness for NRAD and $\rm ^{55}Fe$+NRAD data, for NNC (left) and iDSBSCAN (right).} 
+\includegraphics[width=0.32\textwidth]{NNC_ScanSlim.pdf}
+\includegraphics[width=0.32\textwidth]{DBSCAN_Scanslim.pdf}
+\includegraphics[width=0.32\textwidth]{I2DBSCAN_Scanslim.pdf}
+\caption{Scan in the number of clusters on the $\rm ^{55}Fe$ peak region (between 1500 and 4500 photons) when changing the threshold on the slimness for NRAD and ER data, for NNC, DBSCAN and iDSBSCAN.} 
 \label{fig_slim_scan}
 \end{figure}
 
 %\newpage
 
-Based on the measurements of Fig.~\ref{fig_slim_scan}, the impact of the slimness parameter can be assessed by measuring selection efficiency ($\rm \varepsilon_{sel}$) and fake events ($\rm F_{evts}$), as defined below:
+Based on the measurements of Fig.~\ref{fig_slim_scan}, the impact of the slimness parameter can be assessed by measuring the relative efficiency ($\rm \varepsilon_{sel}$), defining the highest value of the $^{55}$Fe curves as 100\%, and fake events ($\rm F_{evts}$), as defined below:
+
+
 \begin{itemize}
     \item $\rm \varepsilon_{sel}$: number of clusters found in the ER dataset ($\rm nFe$) subtracted by the number of clusters found in the NRAD dataset ($\rm nRd$) divided by the maximum value of the $\rm nFe-nRd$ subtraction among all slimness values (see Equation~\ref{eq:01});
     
@@ -546,15 +553,12 @@ Based on the measurements of Fig.~\ref{fig_slim_scan}, the impact of the slimnes
 \label{eq:02}
 \end{equation}
 
-Figure~\ref{fig_cdf_slim} shows that for slimness below 0.4
-the efficiency for background events is very small, while most of the $^{55}$Fe events are retained.
+Figure~\ref{fig_cdf_slim} shows that for slimness below 0.4 the efficiency for background events is very small, while most of the $^{55}$Fe events are retained.
 %Above this value the number of $^{55}$Fe clusters will also tend to decrease, indicating a loss of efficiency.
-Table~\ref{tab:dvNccComp} shows the computed $\rm \varepsilon_{sel}$ and $\rm F_{evts}$ for both clustering methods and different thresholds on the slimness variable ranging from 0.0 to 0.8.  For the high efficiency region ($\geq 0.94$), occurring for slimness values from 0.0 to 0.4, iDBSCAN achieved a lower fake event probability, always about 3 times less than NNC. For slimness greater than or equal to 0.6 both methods begin to lose efficiency.
+Tables~\ref{tab:effComp} and ~\ref{tab:falseComp} shows the computed $\rm \varepsilon_{sel}$ and $\rm F_{evts}$ for both clustering methods and different thresholds on the slimness variable ranging from 0.0 to 0.8, respectively. The errors presented in these tables were computed considering a confidence interval of 95\% for a binomial proportion \cite{brown2001interval}. For the high efficiency region ($\geq 0.94$), occurring for slimness values from 0.0 to 0.4, iDBSCAN and DBSCAN achieved a lower fake event probability, always about 3 times less than NNC. For slimness greater than or equal to 0.6 all methods begin to lose efficiency.
 %showed an improvement in false alarm of approximately 65\% in relation to NNC.
 %The best results were achieved for slimness of about 0.4: statistically with the same efficiency as for lower values of slimness, but with a better background rejection performance. 
-For slimness greater than 0.4, the signal is still almost 100$\%$ efficient, while the background is reduced by a factor 1/4.
-
-
+More specifically, for a slimness threshold of 0.4, the efficiency is still close to 100\%, compared to not using slimness, but the number of fake events is reduced by a factor of about 2 for all the methods.
 
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
@@ -575,23 +579,62 @@ For slimness greater than 0.4, the signal is still almost 100$\%$ efficient, whi
 %\end{table}
 
 
+%\begin{table}[ht]
+%\small
+%\centering
+%\caption{$\rm \varepsilon_{sel}$ and $\rm F_{evts}$ comparison between NNC and iDBSCAN.}
+%\label{tab:dvNccComp}
+%\begin{tabular}{c|cc|cc|cc|cc|c}
+%\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}\textbf{Slimness}\\ (width/length)\end{tabular}} & \multicolumn{4}{c|}{$\mathbf{\rm \varepsilon_{sel}}$}                     & %\multicolumn{4}{c|}{$F_{evts}$}  & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}$B_{rj} (\%)$\end{tabular}}                  \\
+%                                                                                       & \multicolumn{2}{c|}{iDBSCAN} & \multicolumn{2}{c|}{NNC}   & \multicolumn{2}{c|}{iDBSCAN} & \multicolumn{2}{c|}{NNC} & \multicolumn{1}{c}{\scriptsize iDBSCAN improvement }   \\ \hline \hline
+%0.0 & 1.00  & $^{+0.00}_{-0.02}$ & 0.98 & $^{+0.01}_{-0.02}$ & 0.18  & $^{+0.04}_{-0.04}$ & 0.48 & $^{+0.04}_{-0.04}$ & ~57.0 $^{+5.2}_{-5.4}$\\
+%0.2 & 1.00  & $^{+0.00}_{-0.02}$ & 1.00 & $^{+0.00}_{-0.01}$ & 0.16  & $^{+0.04}_{-0.04}$ & 0.45 & $^{+0.04}_{-0.04}$ & ~51.7 $^{+4.5}_{-4.7}$\\
+%0.4 & 1.00  & $^{+0.00}_{-0.01}$ & 0.94 & $^{+0.02}_{-0.03}$ & 0.08  & $^{+0.04}_{-0.03}$ & 0.25 & $^{+0.05}_{-0.04}$ & ~22.6 $^{+1.4}_{-1.6}$ \\
+%0.6 & 0.77  & $^{+0.05}_{-0.05}$ & 0.86 & $^{+0.03}_{-0.04}$ & 0.08  & $^{+0.04}_{-0.03}$ & 0.11 & $^{+0.04}_{-0.03}$ & ~~~4.0 $^{+0.2}_{-0.3}$\\
+%0.8 & 0.32  & $^{+0.06}_{-0.05}$ & 0.41 & $^{+0.05}_{-0.06}$ & 0.09  & $^{+0.07}_{-0.04}$ & 0.08 & $^{+0.06}_{-0.04}$ & ~~-1.0 $^{+0.1}_{-0.1}$
+%\end{tabular}
+%\end{table}
+
 \begin{table}[ht]
 \small
 \centering
-\caption{$\rm \varepsilon_{sel}$ and $\rm F_{evts}$ comparison between NNC and iDBSCAN.}
-\label{tab:dvNccComp}
-\begin{tabular}{c|cc|cc|cc|cc|c}
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}\textbf{Slimness}\\ (width/length)\end{tabular}} & \multicolumn{4}{c|}{$\mathbf{\rm \varepsilon_{sel}}$}                     & \multicolumn{4}{c|}{$F_{evts}$}  & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}$B_{rj} (\%)$\end{tabular}}                  \\
-                                                                                       & \multicolumn{2}{c|}{iDBSCAN} & \multicolumn{2}{c|}{NNC}   & \multicolumn{2}{c|}{iDBSCAN} & \multicolumn{2}{c|}{NNC} & \multicolumn{1}{c}{\scriptsize iDBSCAN improvement }   \\ \hline \hline
-0.0                                                                                    & 1.00  & $^{+0.00}_{-0.02}$ & 0.98 & $^{+0.01}_{-0.02}$ & 0.18  & $^{+0.04}_{-0.04}$ & 0.48 & $^{+0.04}_{-0.04}$ & ~56.98 $^{+5.15}_{-5.41}$\\
-0.2                                                                                    & 1.00  & $^{+0.00}_{-0.02}$ & 1.00 & $^{+0.00}_{-0.01}$ & 0.16  & $^{+0.04}_{-0.04}$ & 0.45 & $^{+0.04}_{-0.04}$ & ~51.67 $^{+4.50}_{-4.73}$\\
-0.4                                                                                    & 1.00  & $^{+0.00}_{-0.01}$ & 0.94 & $^{+0.02}_{-0.03}$ & 0.08  & $^{+0.04}_{-0.03}$ & 0.25 & $^{+0.05}_{-0.04}$ & ~22.60 $^{+1.37}_{-1.62}$ \\
-0.6                                                                                    & 0.77  & $^{+0.05}_{-0.05}$ & 0.86 & $^{+0.03}_{-0.04}$ & 0.08  & $^{+0.04}_{-0.03}$ & 0.11 & $^{+0.04}_{-0.03}$ & ~03.96 $^{+0.19}_{-0.26}$\\
-0.8                                                                                    & 0.32  & $^{+0.06}_{-0.05}$ & 0.41 & $^{+0.05}_{-0.06}$ & 0.09  & $^{+0.07}_{-0.04}$ & 0.08 & $^{+0.06}_{-0.04}$ & -01.00 $^{+0.10}_{-0.06}$
+\caption{$\rm \varepsilon_{sel}$ comparison between iDBSCAN, DBSCAN and NNC.}
+\label{tab:effComp}
+\begin{tabular}{c|cc|cc|cc}
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}\textbf{Slimness}\\ (width/length)\end{tabular}} & \multicolumn{6}{c}{$\mathbf{\rm \varepsilon_{sel}}$}                  \\
+                                                                                       & \multicolumn{2}{c|}{iDBSCAN} & \multicolumn{2}{c|}{DBSCAN}   & \multicolumn{2}{c}{NNC} \\ \hline \hline
+0.0 & 1.00  & $^{+0.00}_{-0.02}$ & 1.00 & $^{+0.00}_{-0.02}$ & 0.98  & $^{+0.01}_{-0.02}$\\
+0.2 & 1.00  & $^{+0.00}_{-0.02}$ & 1.00 & $^{+0.00}_{-0.01}$ & 1.00  & $^{+0.00}_{-0.01}$\\
+0.4 & 1.00  & $^{+0.00}_{-0.01}$ & 0.97 & $^{+0.02}_{-0.03}$ & 0.94  & $^{+0.02}_{-0.03}$\\
+0.6 & 0.77  & $^{+0.05}_{-0.05}$ & 0.76 & $^{+0.05}_{-0.05}$ & 0.86  & $^{+0.03}_{-0.04}$\\
+0.8 & 0.32  & $^{+0.06}_{-0.05}$ & 0.29 & $^{+0.05}_{-0.05}$ & 0.41  & $^{+0.05}_{-0.06}$
 \end{tabular}
 \end{table}
 
-The last column of Table \ref{tab:dvNccComp} shows the iDBSCAN background-rejection improvement compared to NNC. 
+
+\begin{table}[ht]
+\small
+\centering
+\caption{$\rm F_{evts}$ comparison between iDBSCAN, DBSCAN and NNC.}
+\label{tab:falseComp}
+\begin{tabular}{c|cc|cc|cc|c|c}
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}\textbf{Slimness}\\ (width/length)\end{tabular}} & \multicolumn{6}{c|}{$F_{evts}$}  & \multicolumn{2}{c}{\begin{tabular}[c]{@{}c@{}} iDBSCAN $B_{rj}$ improvement (\%) \end{tabular}}                  \\
+                                                                                       & \multicolumn{2}{c|}{iDBSCAN} & \multicolumn{2}{c|}{DBSCAN}   & \multicolumn{2}{c|}{NNC} & \multicolumn{1}{c|}{~~~~~~~~NNC~~~~~~~~~} & \multicolumn{1}{c}{DBSCAN}   \\ \hline \hline
+0.0 & 0.18  & $^{+0.04}_{-0.04}$ & 0.15 & $^{+0.04}_{-0.04}$ & 0.48 & $^{+0.04}_{-0.04}$ & ~57.0 $^{+11.5}_{-12.3}$  & ~-3.4  $^{+~7.1}_{~-6.5}$\\
+
+0.2 & 0.16  & $^{+0.04}_{-0.04}$ & 0.13 & $^{+0.04}_{-0.03}$ & 0.45 & $^{+0.04}_{-0.04}$ & ~51.7 $^{+10.7}_{-11.6}$  & ~-3.5 $^{+~6.9}_{~-6.4}$\\
+
+0.4 & 0.08  & $^{+0.04}_{-0.03}$ & 0.08 & $^{+0.04}_{-0.03}$ & 0.25 & $^{+0.05}_{-0.04}$ & ~22.6 $^{~+6.6}_{~-8.0}$  & ~~0.1 $^{+~5.3}_{~-6.4}$ \\
+
+0.6 & 0.08  & $^{+0.04}_{-0.03}$ & 0.07 & $^{+0.04}_{-0.03}$ & 0.11 & $^{+0.04}_{-0.03}$ & ~~~4.0 $^{~+4.9}_{~-6.7}$ & ~-0.4 $^{~+6.4}_{~-4.7}$\\
+
+0.8 & 0.09  & $^{+0.07}_{-0.04}$ & 0.11 & $^{+0.08}_{-0.05}$ & 0.08 & $^{+0.06}_{-0.04}$ & ~~-1.0 $^{+10.2}_{-~6.4}$ & ~~1.8 $^{~+6.5}_{-10.5}$
+\end{tabular}
+\end{table}
+
+
+
+The last column of Table \ref{tab:falseComp} shows the iDBSCAN background-rejection improvement compared to NNC. 
 For slimness equal to 0.4, for example, iDBSCAN has 92\% of background rejection efficiency while NNC has 75\%, leading to a relative improvement of (92-75)/75 $\approx$ 23\%.
 %As shown, when slimness is not applied, iDBSCAN might have an improvement over NNC of about 57\% in background rejection efficiency.
 %For the first line for example, iDBSCAN has 86\% of background rejection while NNC has 61\% achieving an improvement of (86-61)/61 $\approx$ 41\% in relation to NNC for slimness equal to zero.
@@ -618,8 +661,8 @@ where $b$ is a free parameter and $k=1/b-1$. The distribution has $\overline{n}$
 
 
 
-Figure~\ref{fig_CosFe} shows the fit results for NCC (left) and iDBSCAN (right) clusters without applying any selection on the slimness parameter.
-Based on the computed values, energy resolution were measured to be (18.1 $\pm$ 3.9)\% and (12.2 $\pm$ 1.8)\% for NNC and iDBSCAN respectively, and the energy conversion factor approximately 515 ADC units per keV for both.
+Figure~\ref{fig_CosFe} shows the fit results for NCC, DBSCAN and iDBSCAN clusters without applying any selection on the slimness parameter.
+Based on the computed values, energy resolution were measured to be (18.1 $\pm$ 3.9)\%, (12.6 $\pm$ 2.2)\% and (12.2 $\pm$ 1.8)\% for NNC, DBSCAN and iDBSCAN respectively, and the energy conversion factor approximately 515 ADC units per keV for all of them.
 Conversion factor and energy resolution are computed using the \textit{mean} and \textit{sigma} parameters shown in Fig.~\ref{fig_CosFe}. 
 The former is the \textit{mean} divided by 5.9 keV (ER energy), while the latter is given by dividing the \textit{sigma} by the \textit{mean}.
 %The former is given by dividing sigma by mean while the later divides mean by 5.9 keV (ER energy).
@@ -627,9 +670,10 @@ The former is the \textit{mean} divided by 5.9 keV (ER energy), while the latter
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.44\textwidth]{log_Resolution_NNC_0.pdf}
-\includegraphics[width=0.44\textwidth]{log_Resolution_DB_0.pdf}
-\caption{Results of the fit applied to the NNC (left) and iDBSCAN (right) energy distributions.}
+\includegraphics[width=0.32\textwidth]{log_Resolution_NNC_0.pdf}
+\includegraphics[width=0.32\textwidth]{log_Resolution_DBN_0.pdf}
+\includegraphics[width=0.32\textwidth]{log_Resolution_IDB_0.pdf}
+\caption{Results of the fit applied to the NNC, DBSCAN and iDBSCAN energy distributions.}
 \label{fig_CosFe}
 \end{figure}
 
@@ -641,15 +685,17 @@ The former is the \textit{mean} divided by 5.9 keV (ER energy), while the latter
 
 
 Figure~\ref{fig_CosFe_slim} shows the fit results when considering only clusters with slimness greater than 0.4.
-The estimated energy resolutions are 13.7 $\pm$ 2.4\% and 11.8 $\pm$ 1.7\% for NNC and iDBSCAN, respectively, with a conversion factor of about 510 ADC units per keV.
-Finally, Table \ref{tab:ResComp} shows the resulting energy resolution for NNC and iDBSCAN for different values of slimness. Note that due to its higher background contamination, the energy resolution obtained with NNC decreases while the slimness threshold increases, reaching eventually the energy resolution obtained with iDBSCAN, which is already quite pure without any selection on slimness.
-
+The estimated energy resolutions are 13.7 $\pm$ 2.4\%, 12.7 $\pm$ 2.3\% and 11.8 $\pm$ 1.7\% for NNC, DBSCAN and iDBSCAN, respectively, with a conversion factor of about 510 ADC units per keV.
+Finally, Table~\ref{tab:ResComp} shows the resulting energy resolution for NNC, DBSCAN and iDBSCAN for different values of slimness.
+Note that, due to its higher background contamination, the energy resolution obtained with NNC decreases as the slimness threshold value increases, reaching eventually the energy resolution obtained with iDBSCAN.
+The energy resolutions obtained with DBSCAN and iDBSCAN are similar and much less dependent of the slimness parameter when compared to NNC, indicating a greater purity in the selection of $^{55}$Fe clusters for these two methods
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=0.44\textwidth]{log_Resolution_NNC_4.pdf}
-\includegraphics[width=0.44\textwidth]{log_Resolution_DB_4.pdf}
-\caption{Results of the fit applied to the NNC (left) and iDBSCAN (right) energy distributions for clusters with slimness higher than 0.4.} 
+\includegraphics[width=0.32\textwidth]{log_Resolution_NNC_4.pdf}
+\includegraphics[width=0.32\textwidth]{log_Resolution_DBN_4.pdf}
+\includegraphics[width=0.32\textwidth]{log_Resolution_IDB_4.pdf}
+\caption{Results of the fit applied to the NNC, DBSCAN and iDBSCAN energy distributions for clusters with slimness higher than 0.4.} 
 \label{fig_CosFe_slim}
 \end{figure}
 
@@ -662,14 +708,14 @@ Finally, Table \ref{tab:ResComp} shows the resulting energy resolution for NNC a
 \centering
 \caption{Detector resolution comparison between NNC and iDBSCAN as a function of slimness.}
 \label{tab:ResComp}
-\begin{tabular}{c|cccc}
-\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Slimness\\ (width/lenght)\end{tabular}} & \multicolumn{4}{c}{Resolution (\%)}                                \\
-                                                                                   & \multicolumn{2}{c|}{iDBSCAN}             & \multicolumn{2}{c}{NNC} \\ \hline \hline
-0.0                                                                                & 12.2 & \multicolumn{1}{c|}{$\pm$ 1.8} & 18.1    & $\pm$ 3.9    \\
-0.2                                                                                & 12.0 & \multicolumn{1}{c|}{$\pm$ 1.7} & 17.3    & $\pm$ 3.7    \\
-0.4                                                                                & 11.8 & \multicolumn{1}{c|}{$\pm$ 1.7} & 13.7    & $\pm$ 2.4    \\
-0.6                                                                                & 12.0 & \multicolumn{1}{c|}{$\pm$ 2.0} & 11.8    & $\pm$ 1.8    \\
-0.8                                                                                & 12.3 & \multicolumn{1}{c|}{$\pm$ 3.8} & 11.1    & $\pm$ 2.8   
+\begin{tabular}{c|cccccc}
+\multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Slimness\\ (width/length)\end{tabular}} & \multicolumn{6}{c}{Resolution (\%)}                                \\
+                                                                                   & \multicolumn{2}{c|}{iDBSCAN}   & \multicolumn{2}{c|}{DBSCAN}           & \multicolumn{2}{c}{NNC} \\ \hline \hline
+0.0                                                                                & 12.2 & \multicolumn{1}{c|}{$\pm$ 1.8} & 12.6 & \multicolumn{1}{c|}{$\pm$ 2.2} & 18.1    & $\pm$ 4.0    \\
+0.2                                                                                & 12.0 & \multicolumn{1}{c|}{$\pm$ 1.7} & 12.6 & \multicolumn{1}{c|}{$\pm$ 2.2} & 17.3    & $\pm$ 3.7    \\
+0.4                                                                                & 11.8 & \multicolumn{1}{c|}{$\pm$ 1.8} & 12.7 & \multicolumn{1}{c|}{$\pm$ 2.3} & 13.7    & $\pm$ 2.4    \\
+0.6                                                                                & 12.0 & \multicolumn{1}{c|}{$\pm$ 2.0} & 12.9 & \multicolumn{1}{c|}{$\pm$ 2.8} & 11.8    & $\pm$ 1.8    \\
+0.8                                                                                & 12.3 & \multicolumn{1}{c|}{$\pm$ 3.8} & 10.4 & \multicolumn{1}{c|}{$\pm$ 3.1} & 11.1    & $\pm$ 2.8   
 \end{tabular}
 \end{table}
 
@@ -680,10 +726,13 @@ Finally, Table \ref{tab:ResComp} shows the resulting energy resolution for NNC a
 
 \section{Summary}\label{sec:conclusion}
 
-An adapted version of DBSCAN, named intensity-based DBSCAN, has recently been developed and tested on data acquired with a CYGNO TPC prototype. The impact of this algorithm on the detector performance has been studied using 5.9~keV photons from a $^{55}$Fe radioactive source and compared with results obtained with a simple NNC approach.
+An adapted version of DBSCAN, named intensity-based DBSCAN, has recently been developed and tested on data acquired with a CYGNO TPC prototype. The impact of this algorithm on the detector performance has been studied using 5.9~keV photons from a $^{55}$Fe radioactive source and compared with results obtained with the standard DBSCAN and NNC algorithms.
 The iDBSCAN parameters were optimized for the running conditions of LEMOn, which uses a 4M pixels sCMOS camera, and for signals from $^{55}$Fe photons.
 The obtained results showed that, with iDBSCAN, the clustering process of the CYGNO's event-reconstruction algorithm can achieve, without any other event-selection routine, a natural radioactivity background rejection in the energy region around 5.9~keV (from 3.0 keV to 8.8 keV) of 0.82$^{+0.04}_{-0.04}$ and a number of electronic-noise clusters per image of $(9 \pm 4)\times 10^{-4}$, occurring predominantly in the region below 1 keV ($\approx$ 500 photons).
-Compared with NNC, these results represent an enhancement of 57\% for the former and, for the latter, an improvement by a factor of a few thousand. 
+Compared to NNC, these results represent an enhancement of 57\% for the former and, for the latter, an improvement by a factor of a few thousand. 
+Compared to DBSCAN, iDBSCAN obtained similar performance regarding background rejection in the $^{55}$Fe energy region.
+However, iDBSCAN has managed to significantly reduce the number of electronic noise clusters also in relation to DBSCAN.
+Therefore, despite achieving similar performance in relation to iDBSCAN in the rejection of background radiation, DBSCAN was not as efficient as iDBSCAN in reducing the effects of electronic noise.
 Finally, the detector energy resolution using iDBSCAN was measured to be (12.2 $\pm$ 1.8)\% for 5.9 keV electron recoil events. By requiring spots with slimness larger than 0.4, a rate of electronic-noise clusters per image of $(5 \pm 3)\times 10^{-4}$, a natural radioactive background rejection of 0.92$^{+0.03}_{-0.04}$ and an energy resolution of (11.8 $\pm$ 1.7)\% were achieved.
 
 \acknowledgments
